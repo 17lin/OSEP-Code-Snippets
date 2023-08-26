@@ -56,6 +56,7 @@ namespace PSLessExec
             {
                 Console.WriteLine("Usage: PSLessExec.exe [Target] [Service] [BinaryToRun]");
                 Console.WriteLine("Example: PSLessExec.exe appsrv01 SensorService notepad.exe");
+                //SensorService is default unused can be take use
                 return;
             }
 
