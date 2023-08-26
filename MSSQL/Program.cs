@@ -113,7 +113,7 @@ namespace MSSQL
 			//
 
 			// Enumerate linked servers
-			res = executeQuery("EXEC sp_linkedservers;", con);
+			res = executeQuery("EXEC sp_linkedservers;", con);//sp_linkedserver 不需要任何權限即可執行
 			Console.WriteLine($"[*] Found linked servers: {res}");
 
 			// Execute on linked server
