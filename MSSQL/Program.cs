@@ -72,7 +72,7 @@ namespace MSSQL
 
 			// Get logins that we can impersonate
 			res = executeQuery("SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE'; ", con);
-			Console.WriteLine($"[*] User can impersonate the following logins: {res}.");//Fro next EXECUTE AS
+			Console.WriteLine($"[*] User can impersonate the following logins: {res}.");//Fro next EXECUTE AS，可以枚舉哪些登錄允許模擬，但不能枚舉誰有權模擬它們
 
 			// Impersonate login and get login information
 			String su = executeQuery("SELECT SYSTEM_USER;", con);
