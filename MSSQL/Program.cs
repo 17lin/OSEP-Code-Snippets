@@ -43,7 +43,7 @@ namespace MSSQL
 		{
 			String serv = "dc01.corp1.com";
 			String db = "master";
-			String conStr = $"Server = {serv}; Database = {db}; Integrated Security = True;";
+			String conStr = $"Server = {serv}; Database = {db}; Integrated Security = True;";//“Integrated Security = True”走Windows 身份驗證。
 			SqlConnection con = new SqlConnection(conStr);
 
 			try
