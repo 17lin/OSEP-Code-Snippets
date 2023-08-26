@@ -59,7 +59,7 @@ namespace PSLessExec
                 return;
             }
 
-            // Open remote SCManager
+            // Open remote SCManager(服務控制管理器)
             IntPtr SCMHandle = OpenSCManager(args[0], null, SC_MANAGER_ALL_ACCESS);
             Console.WriteLine($"Got handle on SCManager on {args[0]}: {SCMHandle}.");
 
